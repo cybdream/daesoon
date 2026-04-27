@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1A237E" />
+  <title>디지털 전경 스마트 뷰어</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-bg" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="logo-wrap">
+        <div class="logo-mark" aria-hidden="true">典</div>
+        <div>
+          <p class="eyebrow">심수 모드</p>
+          <h1>디지털 전경 뷰어</h1>
+        </div>
+      </div>
+      <button id="openSettingsBtn" class="icon-btn" aria-label="설정 열기">⚙</button>
+    </header>
+
+    <main class="screen-stack">
+      <section id="screen-home" class="screen is-active" aria-label="메인 홈">
+        <article class="welcome-card card">
+          <p id="todayMessage" class="muted"></p>
+          <h2>오늘도 성구와 함께 성도하십시오.</h2>
+          <button id="continueBtn" class="primary-btn">최근 읽던 구절 이어보기</button>
+        </article>
+
+        <section>
+          <h3 class="section-title">전경 편람</h3>
+          <div id="sectionGrid" class="section-grid"></div>
+        </section>
+      </section>
+
+      <section id="screen-reader" class="screen" aria-label="본문 뷰어">
+        <article class="reader-shell card">
+          <div class="reader-head">
+            <button id="openSearchFromReader" class="ghost-btn">검색</button>
+            <p id="readerPath" class="reader-path">불러오는 중...</p>
+            <button id="bookmarkBtn" class="ghost-btn">☆</button>
+          </div>
+
+          <div id="readerVerse" class="reader-verse" tabindex="0" aria-live="polite"></div>
+
+          <div class="reader-controls">
+            <button id="prevBtn" class="nav-btn" aria-label="이전 절">◀</button>
+            <input id="progressSlider" type="range" min="1" max="1" value="1" aria-label="장 내 이동" />
+            <button id="nextBtn" class="nav-btn" aria-label="다음 절">▶</button>
+          </div>
+          <p id="progressText" class="muted progress-text"></p>
+        </article>
+      </section>
+
+      <section id="screen-bookmarks" class="screen" aria-label="즐겨찾기">
+        <div class="section-head-row">
+          <h2>심인 서재</h2>
+          <button id="clearBookmarksBtn" class="ghost-btn">전체 해제</button>
+        </div>
+        <div id="bookmarkList" class="list-stack"></div>
+      </section>
+
+      <section id="screen-search" class="screen" aria-label="검색">
+        <label class="search-wrap">
+          <span class="sr-only">검색어 입력</span>
+          <input id="searchInput" type="search" placeholder="키워드 또는 초성 검색 (예: ㄱㅂ)" />
+        </label>
+        <div class="search-toolbar">
+          <label class="search-control">
+            <span class="muted">정렬</span>
+            <select id="searchSort" aria-label="검색 결과 정렬">
+              <option value="relevance">정확도순</option>
+              <option value="recent">최근 열람순</option>
+            </select>
+          </label>
+          <label class="search-control">
+            <span class="muted">최근 범위</span>
+            <select id="searchWindow" aria-label="최근 열람 기간 필터">
+              <option value="all">전체</option>
+              <option value="1d">오늘</option>
+              <option value="7d">7일</option>
+              <option value="30d">30일</option>
+            </select>
+          </label>
+          <label class="search-control">
+            <span class="muted">미리보기</span>
+            <select id="searchPreview" aria-label="검색 결과 미리보기 길이">
+              <option value="short">짧게</option>
+              <option value="long">길게</option>
+            </select>
+          </label>
+        </div>
+        <div id="searchMeta" class="muted">로컬 데이터베이스에서 검색합니다.</div>
+        <div id="searchResult" class="list-stack"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="주요 화면">
+      <button data-screen="home" class="tab-btn is-on">홈</button>
+      <button data-screen="reader" class="tab-btn">본문</button>
+      <button data-screen="bookmarks" class="tab-btn">즐겨찾기</button>
+      <button data-screen="search" class="tab-btn">검색</button>
+    </nav>
+  </div>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" class="settings-form">
+      <header>
+        <h2>독서 설정</h2>
+      </header>
+
+      <label class="field">
+        <span>테마</span>
+        <select id="themeSelect">
+          <option value="light">미색</option>
+          <option value="deep">심야 남색</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>글자 크기</span>
+        <input id="fontSizeInput" type="range" min="16" max="30" step="1" />
+      </label>
+
+      <label class="field">
+        <span>읽기 모드</span>
+        <select id="readerModeSelect">
+          <option value="scroll">상하 스크롤</option>
+          <option value="swipe">좌우 넘김</option>
+        </select>
+      </label>
+
+      <menu class="dialog-actions">
+        <button type="button" value="cancel" class="ghost-btn">닫기</button>
+        <button type="button" id="saveSettingBtn" value="default" class="primary-btn">저장</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="actionDialog">
+    <form method="dialog" class="action-form">
+      <p id="actionVerseInfo" class="muted"></p>
+      <menu class="dialog-actions vertical">
+        <button type="button" id="actionBookmark" value="default" class="ghost-btn">즐겨찾기 추가</button>
+        <button type="button" id="actionCopy" value="default" class="ghost-btn">복사</button>
+        <button type="button" id="actionShare" value="default" class="ghost-btn">공유</button>
+        <button type="button" value="cancel" class="primary-btn">닫기</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
