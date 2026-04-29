@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">디지털 전경 뷰어</string>
+    <string name="title_activity_main">디지털 전경 뷰어</string>
+    <string name="package_name">com.cybdream.daesoon</string>
+    <string name="custom_url_scheme">com.cybdream.daesoon</string>
+</resources>

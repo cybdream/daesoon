@@ -1,0 +1,6 @@
+{
+  "appId": "com.cybdream.daesoon",
+  "appName": "디지털 전경 뷰어",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
