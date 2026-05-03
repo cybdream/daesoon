@@ -45,6 +45,7 @@ const el = {
   themeSelect: document.querySelector("#themeSelect"),
   fontSizeInput: document.querySelector("#fontSizeInput"),
   readerModeSelect: document.querySelector("#readerModeSelect"),
+  closeSettingBtn: document.querySelector("#closeSettingBtn"),
   saveSettingBtn: document.querySelector("#saveSettingBtn"),
   searchInput: document.querySelector("#searchInput"),
   searchSort: document.querySelector("#searchSort"),
@@ -58,6 +59,7 @@ const el = {
   actionBookmark: document.querySelector("#actionBookmark"),
   actionCopy: document.querySelector("#actionCopy"),
   actionShare: document.querySelector("#actionShare"),
+  closeActionBtn: document.querySelector("#closeActionBtn"),
   tabButtons: Array.from(document.querySelectorAll(".tab-btn")),
   screens: {
     home: document.querySelector("#screen-home"),
@@ -83,6 +85,7 @@ async function boot() {
   renderBookmarks();
   renderReader();
   updateSearchMeta("검색 대기 중입니다.");
+  loadHoeboIssues();
 }
 
 function setTodayMessage() {
@@ -122,6 +125,7 @@ function bindEvents() {
   });
 
   el.openSettingsBtn.addEventListener("click", openSettingsDialog);
+  el.closeSettingBtn.addEventListener("click", () => closeDialog(el.settingsDialog));
   el.saveSettingBtn.addEventListener("click", saveSettingsFromDialog);
 
   el.searchInput.addEventListener("input", debounce(runSearch, 120));
@@ -167,6 +171,11 @@ function bindEvents() {
     event.preventDefault();
     await shareCurrentVerse();
   });
+
+  el.closeActionBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    closeDialog(el.actionDialog);
+  });
 }
 
 function bindLongPressActions() {
@@ -176,9 +185,7 @@ function bindLongPressActions() {
       const current = currentVerse();
       if (!current) return;
       el.actionVerseInfo.textContent = current.path;
-      if (typeof el.actionDialog.showModal === "function") {
-        el.actionDialog.showModal();
-      }
+      openDialog(el.actionDialog);
     }, 700);
   };
 
@@ -194,7 +201,7 @@ function openSettingsDialog() {
   el.themeSelect.value = state.settings.theme;
   el.fontSizeInput.value = state.settings.fontSize;
   el.readerModeSelect.value = state.settings.readerMode;
-  el.settingsDialog.showModal();
+  openDialog(el.settingsDialog);
 }
 
 function saveSettingsFromDialog() {
@@ -204,6 +211,27 @@ function saveSettingsFromDialog() {
   ensureSafeReaderMode(true);
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
   applySettings();
+  closeDialog(el.settingsDialog);
+}
+
+function openDialog(dialogNode) {
+  if (!dialogNode) return;
+  if (typeof dialogNode.showModal === "function") {
+    if (!dialogNode.open) dialogNode.showModal();
+    return;
+  }
+
+  dialogNode.setAttribute("open", "");
+}
+
+function closeDialog(dialogNode) {
+  if (!dialogNode) return;
+  if (typeof dialogNode.close === "function") {
+    dialogNode.close();
+    return;
+  }
+
+  dialogNode.removeAttribute("open");
 }
 
 function loadLocalState() {
@@ -279,7 +307,10 @@ function ensureSafeReaderMode(notify) {
 async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   try {
-    await navigator.serviceWorker.register("sw.js");
+    const registration = await navigator.serviceWorker.register(`sw.js?v=${APP_CACHE_VERSION}`, {
+      updateViaCache: "none"
+    });
+    await registration.update();
   } catch (error) {
     console.warn("ServiceWorker 등록 실패", error);
   }
@@ -767,6 +798,44 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+async function loadHoeboIssues() {
+  const listEl = document.querySelector("#hoeboIssueList");
+  if (!listEl) return;
+
+  try {
+    const res = await fetch("../hoebo/data/index.json");
+    if (!res.ok) throw new Error("not found");
+    const payload = await res.json();
+    const issues = Array.isArray(payload.issues) ? payload.issues : [];
+    issues.sort((a, b) => b.issueNo - a.issueNo);
+
+    if (issues.length === 0) {
+      listEl.innerHTML = `<p class="muted hoebo-loading">회보 데이터가 없습니다.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = issues.map((issue) => `
+      <div class="hoebo-card">
+        ${issue.coverUrl
+          ? `<img src="${escapeHtml(issue.coverUrl)}" alt="${escapeHtml(issue.issueLabel)} 표지" class="hoebo-cover" loading="lazy" />`
+          : `<div class="hoebo-cover hoebo-cover-placeholder"></div>`}
+        <div class="hoebo-card-body">
+          <strong>${escapeHtml(issue.issueLabel)}</strong>
+          <span class="muted">${escapeHtml(issue.dateLabel)}</span>
+          <span class="muted">${issue.articleCount || "?"}개 기사</span>
+        </div>
+        <div class="hoebo-card-actions">
+          ${issue.pdfUrl
+            ? `<a href="${escapeHtml(issue.pdfUrl)}" target="_blank" rel="noreferrer noopener" class="hoebo-pdf-btn">PDF ↓</a>`
+            : `<span class="hoebo-pdf-none">PDF 없음</span>`}
+        </div>
+      </div>
+    `).join("");
+  } catch {
+    listEl.innerHTML = `<p class="muted hoebo-loading">hoebo 구축 데이터를 찾을 수 없습니다. <code>npm run build:data</code>를 먼저 실행하세요.</p>`;
+  }
 }
 
 function requestResult(req) {

@@ -30,6 +30,7 @@ body {
   color: var(--ink);
   background: var(--bg);
   min-height: 100dvh;
+  overflow: hidden;
 }
 
 body.reader-screen {
@@ -135,7 +136,7 @@ select:focus-visible {
 }
 
 .screen-stack {
-  padding: 0.5rem 1rem 5rem;
+  padding: 0.5rem 1rem 0.75rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -150,6 +151,7 @@ select:focus-visible {
 
 .screen.is-active {
   display: block;
+  overflow-y: auto;
 }
 
 #screen-reader.is-active {
@@ -158,6 +160,7 @@ select:focus-visible {
   height: 100%;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 @keyframes fade-up {
@@ -241,6 +244,7 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 
 .reader-head {
@@ -469,13 +473,99 @@ dialog::backdrop {
   border: 0;
 }
 
+/* ── 대순회보 섹션 ── */
+.hoebo-section {
+  margin-top: 1.25rem;
+}
+
+.hoebo-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.hoebo-more-btn {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.7rem;
+  text-decoration: none;
+  color: var(--main);
+}
+
+.hoebo-loading {
+  font-size: 0.875rem;
+}
+
+.hoebo-issue-list {
+  display: grid;
+  gap: 8px;
+}
+
+.hoebo-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(10, 14, 31, 0.06);
+}
+
+.hoebo-cover {
+  width: 44px;
+  height: 58px;
+  border-radius: 7px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--card), var(--main) 10%);
+}
+
+.hoebo-cover-placeholder {
+  display: block;
+}
+
+.hoebo-card-body {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  font-size: 0.875rem;
+}
+
+.hoebo-card-body strong {
+  font-size: 0.95rem;
+}
+
+.hoebo-card-actions {
+  flex-shrink: 0;
+}
+
+.hoebo-pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: linear-gradient(120deg, var(--main), var(--main-2));
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hoebo-pdf-none {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
 @media (min-width: 760px) {
   .section-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .screen-stack {
-    padding-bottom: 6rem;
+    padding-bottom: 0.9rem;
   }
 }
 

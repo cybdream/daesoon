@@ -19,8 +19,8 @@
       <div class="logo-wrap">
         <div class="logo-mark" aria-hidden="true">典</div>
         <div>
-          <p class="eyebrow">심수 모드</p>
-          <h1>디지털 전경 뷰어</h1>
+
+          <h1>전경 디지털 뷰어</h1>
         </div>
       </div>
       <button id="openSettingsBtn" class="icon-btn" aria-label="설정 열기">⚙</button>
@@ -37,6 +37,16 @@
         <section>
           <h3 class="section-title">전경 편람</h3>
           <div id="sectionGrid" class="section-grid"></div>
+        </section>
+
+        <section class="hoebo-section">
+          <div class="hoebo-section-head">
+            <h3 class="section-title">대순회보</h3>
+            <a href="../hoebo/" target="_blank" rel="noreferrer noopener" class="ghost-btn hoebo-more-btn">전체 보기 →</a>
+          </div>
+          <div id="hoeboIssueList" class="hoebo-issue-list">
+            <p class="muted hoebo-loading">불러오는 중...</p>
+          </div>
         </section>
       </section>
 
@@ -138,7 +148,7 @@
       </label>
 
       <menu class="dialog-actions">
-        <button type="button" value="cancel" class="ghost-btn">닫기</button>
+        <button type="button" id="closeSettingBtn" value="cancel" class="ghost-btn">닫기</button>
         <button type="button" id="saveSettingBtn" value="default" class="primary-btn">저장</button>
       </menu>
     </form>
@@ -151,7 +161,7 @@
         <button type="button" id="actionBookmark" value="default" class="ghost-btn">즐겨찾기 추가</button>
         <button type="button" id="actionCopy" value="default" class="ghost-btn">복사</button>
         <button type="button" id="actionShare" value="default" class="ghost-btn">공유</button>
-        <button type="button" value="cancel" class="primary-btn">닫기</button>
+        <button type="button" id="closeActionBtn" value="cancel" class="primary-btn">닫기</button>
       </menu>
     </form>
   </dialog>
