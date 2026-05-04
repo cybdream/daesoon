@@ -9,13 +9,15 @@
     "verify:data": "node scripts/build-dataset.mjs --input data/raw/scriptures.csv --output data/scriptures.json --check-only",
     "cap:add:android": "npm run build:web && npx cap add android",
     "cap:sync": "npm run build:web && npx cap sync android",
-    "android:open": "npx cap open android"
+    "android:open": "npx cap open android",
+    "deploy": "npm run build:web && npx gh-pages -d dist"
   },
   "dependencies": {
     "@capacitor/core": "^8.3.1"
   },
   "devDependencies": {
     "@capacitor/android": "^8.3.1",
-    "@capacitor/cli": "^8.3.1"
+    "@capacitor/cli": "^8.3.1",
+    "gh-pages": "^6.3.0"
   }
 }
