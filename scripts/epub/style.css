@@ -1,0 +1,159 @@
+@charset "utf-8";
+
+/* 서브셋 임베딩 — make-epub.py 가 실사용 글자만 남겨 fonts/ 에 넣는다 */
+@font-face {
+  font-family: "Noto Serif KR";
+  src: url("fonts/NotoSerifKR-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Serif KR";
+  src: url("fonts/NotoSerifKR-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* 리플로 형식이라 글자 크기와 여백은 리더가 조절한다. 여기서는 비율만 잡는다. */
+body {
+  font-family: "Noto Serif KR", serif;
+  line-height: 1.75;
+  margin: 0 1em;
+  color: #1c1a17;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ---------- 표지 ---------- */
+.cover {
+  text-align: center;
+  margin-top: 25%;
+}
+.cover h1 {
+  font-size: 2.6em;
+  font-weight: 600;
+  letter-spacing: .3em;
+  text-indent: .3em;
+  margin: 0;
+}
+.cover .hanja {
+  font-size: 1.15em;
+  color: #8a6a4f;
+  letter-spacing: .5em;
+  text-indent: .5em;
+  margin-top: .8em;
+}
+.cover .sub {
+  font-size: .85em;
+  color: #6f6355;
+  line-height: 2;
+  margin-top: 2.5em;
+}
+.cover .meta {
+  font-size: .7em;
+  color: #9a8f80;
+  line-height: 1.9;
+  margin-top: 4em;
+}
+.rule {
+  width: 5em;
+  height: 1px;
+  background: #b9a88f;
+  border: 0;
+  margin: 2em auto;
+}
+
+/* ---------- 편 표제 ---------- */
+.section-head {
+  text-align: center;
+  margin: 2.5em 0 3em;
+  page-break-before: always;
+  break-before: page;
+}
+.section-head h1 {
+  font-size: 1.9em;
+  font-weight: 600;
+  color: #6b3f2a;
+  letter-spacing: .25em;
+  text-indent: .25em;
+  margin: 0;
+}
+.section-head .han {
+  font-size: .95em;
+  color: #8a6a4f;
+  letter-spacing: .4em;
+  text-indent: .4em;
+  margin-top: .7em;
+}
+.section-head .cnt {
+  font-size: .7em;
+  color: #a89c8b;
+  letter-spacing: .1em;
+  margin-top: 1.2em;
+}
+
+/* ---------- 장 ---------- */
+h2.chapter-title {
+  font-size: 1.15em;
+  font-weight: 600;
+  color: #6b3f2a;
+  letter-spacing: .15em;
+  margin: 2.2em 0 1.4em;
+}
+
+/* ---------- 절 ---------- */
+p.v {
+  margin: 0 0 .9em 0;
+  padding-left: 2.4em;
+  text-indent: -2.4em;
+  text-align: left;
+  orphans: 2;
+  widows: 2;
+}
+p.v .vn {
+  display: inline-block;
+  width: 2.4em;
+  text-indent: 0;
+  font-size: .78em;
+  color: #a8724e;
+  vertical-align: baseline;
+}
+
+/* ---------- 목차 ---------- */
+nav#toc h1 {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #4a2c1c;
+  letter-spacing: .3em;
+  text-indent: .3em;
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+nav#toc ol {
+  list-style: none;
+  padding-left: 0;
+}
+nav#toc ol ol {
+  padding-left: 1.4em;
+}
+nav#toc li {
+  margin: .45em 0;
+}
+nav#toc a {
+  text-decoration: none;
+  color: #1c1a17;
+}
+nav#toc > ol > li > a {
+  font-weight: 600;
+  color: #4a2c1c;
+}
+nav#toc .han {
+  font-size: .8em;
+  color: #8a6a4f;
+  margin-left: .5em;
+}
+nav#toc .cnt {
+  font-size: .75em;
+  color: #9a8f80;
+  margin-left: .4em;
+}

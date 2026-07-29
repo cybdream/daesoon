@@ -10,6 +10,7 @@
     "build:data": "node scripts/build-dataset.mjs --input data/raw/scriptures.csv --output data/scriptures.json",
     "verify:data": "node scripts/build-dataset.mjs --input data/raw/scriptures.csv --output data/scriptures.json --check-only",
     "build:pdf": "pwsh -NoProfile -File scripts/pdf/build-pdf.ps1",
+    "build:epub": "python scripts/epub/make-epub.py",
     "cap:add:android": "npm run build:web && npx cap add android",
     "cap:sync": "npm run build:web && npx cap sync android",
     "android:open": "npx cap open android",
