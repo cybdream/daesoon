@@ -27,6 +27,22 @@ npm run build:pdf
 | `build-html.ps1` | 편·장·절 구조로 묶어 조판용 HTML 을 만든다 |
 | `print-pdf.ps1` | 크롬을 헤드리스로 띄우고 Paged.js 조판이 끝나길 기다렸다가 PDF 로 출력한다 |
 
+## 레이아웃 확인
+
+CSS 를 손봤을 때 조판이 깨지지 않았는지 보려면, PDF 를 굽기 전에 페이지를 PNG 로 뜰 수 있다.
+
+```powershell
+pwsh -File scripts/pdf/shot-page.ps1                    # 1~3 페이지
+pwsh -File scripts/pdf/shot-page.ps1 -Pages "1,12,219"  # 특정 페이지
+pwsh -File scripts/pdf/shot-page.ps1 -Pages "5" -Scale 3
+```
+
+결과는 `out/shots/page-NNN.png` 에 저장된다. `build-html.ps1` 을 먼저 돌려 둬야 하고,
+`print-pdf.ps1` 과 포트가 겹치지 않으므로 동시에 실행해도 된다.
+
+페이지 번호는 **따옴표로 감싸야 한다.** `pwsh -File` 로 넘길 때 따옴표 없는 배열
+인자는 `1,12,219` 가 `112219` 로 뭉개진다.
+
 ## 폰트를 왜 따로 만드는가
 
 시스템에 설치된 `NotoSerifKR-VF.ttf` 는 **가변 폰트**(wght 200–900)다. CSS 에서 이걸 그대로
