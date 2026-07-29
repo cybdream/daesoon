@@ -31,6 +31,10 @@ MAKE_FONTS = REPO / "scripts" / "pdf" / "make-fonts.py"
 # 메모가 유지된다). 새 책을 낼 때가 아니면 이 값을 건드리지 말 것.
 BOOK_ID = "urn:uuid:8f3c1a76-5d42-4e18-9b07-2c6ea4f9d310"
 
+# 발행 주체. dc:creator 를 비워 두면 리더 서재에 '작가 없음' 으로 뜨므로
+# dc:publisher 와 함께 넣는다.
+PUBLISHER = "대순진리회"
+
 # scripts/pdf/build-html.ps1 의 $hanja 와 같은 표. 언어가 달라 공유가 안 되므로
 # 복제해 둔다. 편 이름은 고정값이라 어긋날 일이 없다.
 SECTION_HANJA = {
@@ -183,6 +187,9 @@ def build_opf(doc, chapter_files):
         '  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">\n'
         f'    <dc:identifier id="book-id">{BOOK_ID}</dc:identifier>\n'
         '    <dc:title>전경 典經</dc:title>\n'
+        f'    <dc:creator id="creator">{PUBLISHER}</dc:creator>\n'
+        f'    <meta refines="#creator" property="file-as">{PUBLISHER}</meta>\n'
+        f'    <dc:publisher>{PUBLISHER}</dc:publisher>\n'
         '    <dc:language>ko</dc:language>\n'
         '    <dc:source>https://github.com/cybdream/daesoon</dc:source>\n'
         f'    <meta property="dcterms:modified">{modified}</meta>\n'
